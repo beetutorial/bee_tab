@@ -1,5 +1,5 @@
 //
-//	 ______    ______    ______    
+//     ______    ______    ______    
 //	/\  __ \  /\  ___\  /\  ___\   
 //	\ \  __<  \ \  __\_ \ \  __\_ 
 //	 \ \_____\ \ \_____\ \ \_____\ 
@@ -21,7 +21,7 @@
 
 @interface no320_bee_tab_board : BeeUIBoard
 {
-    BeeUIStackGroup *	_mainStackGroup;
+   
     BeeUITabBar *		_tabBar;
     NSMutableArray *	_boards;
 
@@ -35,6 +35,8 @@
 
     NSMutableArray *    __controllerArray;
 }
+
+@property (retain, nonatomic) BeeUIStackGroup *	_mainStackGroup;
  
 @property (assign, nonatomic)int selectedIndex;
 
@@ -62,6 +64,6 @@
 
 AS_SINGLETON( no320_bee_tab_board )
 
-- (void)toggleBoard:(NSUInteger)index;
+- (void)toggleBoard:(NSUInteger)index; 
 
 @end

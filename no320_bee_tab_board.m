@@ -25,6 +25,7 @@
 @synthesize logTrace ;
 @synthesize selectedIndex;
 
+@synthesize _mainStackGroup;
 
 DEF_SINGLETON( no320_bee_tab_board )
 
@@ -33,11 +34,11 @@ DEF_SINGLETON( no320_bee_tab_board )
 - (void)load
 {
     [super load];
-
-     _boards = [[NSMutableArray alloc] init];
- 
-     
     
+    _boards = [[NSMutableArray alloc] init];
+    
+    
+    self._mainStackGroup = [[BeeUIStackGroup alloc] init];
     
     NSLog(@"1");
     
@@ -47,7 +48,8 @@ DEF_SINGLETON( no320_bee_tab_board )
 {
 	[_boards removeAllObjects];
 	[_boards release];
-
+    [_mainStackGroup release];
+    
     [super unload];
 }
 
@@ -79,36 +81,36 @@ DEF_SINGLETON( no320_bee_tab_board )
         
         [BeeUITipsCenter setDefaultContainerView:self.view];
         [BeeUITipsCenter setDefaultBubble:[UIImage imageNamed:@"alertBox.png"]];
-
+        
         self.view.backgroundColor = [UIColor whiteColor];
-
-        _mainStackGroup = [[BeeUIStackGroup alloc] init];
-        [self.view addSubview:_mainStackGroup.view];
-
+        
+        
+        [self.view addSubview:self._mainStackGroup.view];
+        
         _tabBar = [[BeeUITabBar alloc] init];
         [_tabBar addTitle:@"First"];
         [_tabBar addTitle:@"Second"];
         [_tabBar addTitle:@"Second"];
         [_tabBar addTitle:@"Second"];
         [self.view addSubview:_tabBar];
-
+        
         [_tabBar setSelectedIndex:0];
-
+        
         if (_boards == nil) {
             return;
         }
- 
+        
         [self hideTabBar];
         [self addCustomElements];
 	}
 	else if ( [signal is:BeeUIBoard.DELETE_VIEWS] )
 	{
-        SAFE_RELEASE( _mainStackGroup );
+        //        SAFE_RELEASE( _mainStackGroup );
         SAFE_RELEASE( _tabBar );
 	}
 	else if ( [signal is:BeeUIBoard.LAYOUT_VIEWS] )
 	{
-        _tabBar.frame = CGRectMake( 0, self.viewBound.size.height - 49, self.viewBound.size.width, 49 );
+        _tabBar.frame = CGRectMake( 0, self.viewBound.size.height - 45, self.viewBound.size.width, 45 );
         _mainStackGroup.view.frame = CGRectMake( 0, 0, self.viewBound.size.width, self.viewBound.size.height - _tabBar.frame.size.height );
 	}
     else if ( [signal is:BeeUIBoard.LOAD_DATAS] )
@@ -195,14 +197,14 @@ DEF_SINGLETON( no320_bee_tab_board )
 		return;
     
     selectedIndex = index;
-
+    
     BeeUIStack * stack = [_mainStackGroup reflect:className];
     if ( nil == stack )
     {
         CGRect stackFrame;
         stackFrame.origin = CGPointZero;
         stackFrame.size = _mainStackGroup.view.frame.size;
-
+        
         stack = [BeeUIStack stack:className firstBoardClass:NSClassFromString(className)];
         stack.view.frame = stackFrame;
         [_mainStackGroup append:stack];
@@ -212,6 +214,9 @@ DEF_SINGLETON( no320_bee_tab_board )
         [_mainStackGroup present:stack];
     }
 }
+
+
+ 
 
 #pragma mark - tab ui
 
@@ -262,8 +267,8 @@ DEF_SINGLETON( no320_bee_tab_board )
 //先注释掉，以后实现
 - (UIViewController *)getShowingViewController
 {
-//    UINavigationController *currentNavController =  (UINavigationController *)self.selectedViewController;
-//    return currentNavController.visibleViewController;
+    //    UINavigationController *currentNavController =  (UINavigationController *)self.selectedViewController;
+    //    return currentNavController.visibleViewController;
 }
 
 - (void)addCustomElements{
@@ -287,7 +292,7 @@ DEF_SINGLETON( no320_bee_tab_board )
     _customView.delegate = self;
     _customView.frame = CGRectMake(0, UI_MAX_HEIGHT - TAB_CONTROLLER_TAB_HEIGHT-21, 320, TAB_CONTROLLER_TAB_HEIGHT);
     [self.view addSubview:_customView];
-//    [self selectTab:0];
+    //    [self selectTab:0];
 }
 
 -(void)hide:(BOOL)hidden withAnimation:(BOOL)isAnimation{
@@ -334,9 +339,9 @@ DEF_SINGLETON( no320_bee_tab_board )
 #pragma mark - lifecycle methods
 - (id)init{
     self =[super init];
-//    _tabBarInstance = self;
+    //    _tabBarInstance = self;
 	if (self) {
-       
+        
     }
 	return self;
 }
@@ -403,7 +408,7 @@ DEF_SINGLETON( no320_bee_tab_board )
         
         bgView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@/%@",__bundleName,(NSString *)[_config objectForKey:@"name"]]];
         
-//        bgView.frame = [self getRect:[_config objectForKey:@"frame"]];
+        //        bgView.frame = [self getRect:[_config objectForKey:@"frame"]];
         
     }
     [self.view insertSubview:bgView belowSubview:_customView];
@@ -425,11 +430,11 @@ DEF_SINGLETON( no320_bee_tab_board )
             topicNavigationController.navigationBar.hidden = YES;
             [_controllersArray addObject:topicNavigationController];
         }
-    
+        
     }
     
     __controllerArray = _controllersArray;
-
+    
 }
 
 #pragma mark - utils
@@ -491,7 +496,7 @@ DEF_SINGLETON( no320_bee_tab_board )
 
 - (CGRect)set_init_tab_view_frame
 {
-
+    
 }
 
 @end
